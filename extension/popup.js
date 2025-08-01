@@ -100,8 +100,52 @@ document.getElementById("fetchHtml").addEventListener("click", async () => {
 });
 document.getElementById("visualize").addEventListener("click", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
     files: ["content.js"],
   });
+
+  setTimeout(() => {
+    chrome.scripting.executeScript(
+      {
+        target: { tabId: tab.id },
+        func: () => {
+          return {
+            height: document.body.scrollHeight,
+            width: document.body.scrollWidth,
+          };
+        },
+      },
+      async (results) => {
+        const { height, width } = results[0].result;
+
+        await chrome.tabs.setZoom(tab.id, 1);
+
+        chrome.tabs.captureVisibleTab(
+          null,
+          { format: "jpeg", quality: 100 },
+          async (dataUrl) => {
+            if (!dataUrl) {
+              alert("Failed to capture screenshot");
+              return;
+            }
+
+            try {
+              const res = await fetch("http://localhost:3000/upload", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ screenshot: dataUrl }),
+              });
+
+              const json = await res.json();
+              alert("Upload success: " + json.message);
+            } catch (e) {
+              alert("Upload failed: " + e.message);
+            }
+          }
+        );
+      }
+    );
+  }, 2000);
 });

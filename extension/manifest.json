@@ -9,11 +9,5 @@
   },
   "background": {
     "service_worker": "popup.js"
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ]
+  }
 }
