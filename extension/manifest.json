@@ -3,11 +3,17 @@
   "name": "Full Page Screenshot Uploader",
   "version": "1.0",
   "permissions": ["tabs", "scripting", "activeTab"],
-  "host_permissions": ["http://localhost:3000/"],
+  "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup.html"
   },
   "background": {
     "service_worker": "popup.js"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
 }

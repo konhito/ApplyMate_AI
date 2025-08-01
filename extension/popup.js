@@ -48,16 +48,60 @@ document.getElementById("fetchHtml").addEventListener("click", async () => {
   chrome.scripting.executeScript(
     {
       target: { tabId: tab.id },
-      func: () => document.documentElement.outerHTML,
+      func: () => {
+        const elements = Array.from(document.querySelectorAll("*"));
+        const clickable = elements.filter((el) => {
+          const tag = el.tagName.toLowerCase();
+          const role = el.getAttribute("role");
+          const onclick = el.getAttribute("onclick");
+          const style = window.getComputedStyle(el);
+
+          return (
+            ["a", "button", "input"].includes(tag) ||
+            onclick ||
+            role === "button" ||
+            style.cursor === "pointer"
+          );
+        });
+
+        return clickable.map((el) => {
+          return {
+            tag: el.tagName,
+            text: el.innerText?.trim().slice(0, 100),
+            id: el.id,
+            class: el.className,
+          };
+        });
+      },
     },
     (results) => {
       if (chrome.runtime.lastError) {
         document.getElementById("output").textContent =
           "Error: " + chrome.runtime.lastError.message;
       } else {
-        const html = results[0].result;
-        document.getElementById("output").textContent = html;
+        const elements = results[0].result;
+        if (!elements.length) {
+          document.getElementById("output").textContent =
+            "No clickable elements found.";
+          return;
+        }
+
+        document.getElementById("output").textContent = elements
+          .map(
+            (e) =>
+              `<${e.tag.toLowerCase()} id="${e.id}" class="${e.class}"> ${
+                e.text
+              }`
+          )
+          .join("\n\n");
       }
     }
   );
+});
+document.getElementById("visualize").addEventListener("click", async () => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ["content.js"],
+  });
 });
