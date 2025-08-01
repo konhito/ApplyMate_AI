@@ -98,6 +98,7 @@ document.getElementById("fetchHtml").addEventListener("click", async () => {
     }
   );
 });
+
 document.getElementById("visualize").addEventListener("click", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -149,3 +150,79 @@ document.getElementById("visualize").addEventListener("click", async () => {
     );
   }, 2000);
 });
+
+async function takeScreenshot() {
+  const [tab] = await chrome.tabs.query({
+    active: true,
+    currentWindow: true,
+  });
+
+  await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ["content.js"],
+  });
+
+  setTimeout(() => {
+    chrome.scripting.executeScript(
+      {
+        target: { tabId: tab.id },
+        func: () => {
+          return {
+            height: document.body.scrollHeight,
+            width: document.body.scrollWidth,
+          };
+        },
+      },
+      async (results) => {
+        const { height, width } = results[0].result;
+
+        await chrome.tabs.setZoom(tab.id, 1);
+
+        chrome.tabs.captureVisibleTab(
+          null,
+          { format: "jpeg", quality: 100 },
+          async (dataUrl) => {
+            if (!dataUrl) {
+              alert("Failed to capture screenshot");
+              return;
+            }
+
+            try {
+              const res = await fetch("http://localhost:3000/upload", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ screenshot: dataUrl }),
+              });
+
+              const json = await res.json();
+              console.log("Upload success: " + json.message);
+            } catch (e) {
+              console.log("Upload failed: " + e.message);
+            }
+          }
+        );
+      }
+    );
+  }, 2000);
+}
+
+async function checkBackendForScreenshot() {
+  try {
+    const res = await fetch("http://localhost:3000/shouldtakess");
+    const { shouldCapture } = await res.json();
+
+    if (shouldCapture) {
+      await takeScreenshot();
+
+      // Notify backend that screenshot was taken
+      await fetch("http://localhost:3000/screenshotTaken", {
+        method: "POST",
+      });
+    }
+  } catch (e) {
+    console.error("Error checking screenshot trigger:", e);
+  }
+}
+
+// Check every 3 seconds
+setInterval(checkBackendForScreenshot, 3000);

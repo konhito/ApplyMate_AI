@@ -16,6 +16,8 @@ app.use(
   })
 );
 
+let shouldCapture = true;
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
@@ -93,6 +95,20 @@ app.post("/upload", (req: Request, res: Response) => {
     );
     res.status(500).json({ error: "Failed to save image" });
   }
+});
+
+app.post("/shouldtakess", (req, res) => {
+  shouldCapture = true;
+  res.json({ message: "Screenshot trigger set", shouldCapture });
+});
+
+app.get("/shouldtakess", (req, res) => {
+  res.json({ shouldCapture });
+});
+
+app.post("/screenshotTaken", (req, res) => {
+  console.log("Screenshot taken, capture flag set to false");
+  res.json({ message: "Capture flag reset" });
 });
 
 app.listen(port, () => {
