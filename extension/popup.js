@@ -226,3 +226,42 @@ async function checkBackendForScreenshot() {
 
 // Check every 3 seconds
 setInterval(checkBackendForScreenshot, 3000);
+
+function clickElementById(jsonInput) {
+  const clickId = jsonInput.click;
+  const elem = document.querySelector(`[data-click-id='${clickId}']`);
+  if (elem) {
+    elem.click();
+    console.log(`Clicked element with id ${clickId}`);
+  } else {
+    console.warn(`Element with id ${clickId} not found`);
+  }
+}
+async function checkBackendForClick() {
+  try {
+    const res = await fetch("http://localhost:3000/shouldclick");
+    const data = await res.json();
+
+    if (data?.click) {
+      const [tab] = await chrome.tabs.query({
+        active: true,
+        currentWindow: true,
+      });
+
+      await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: (clickId) => {
+          const elem = document.querySelector(
+            `[data-clickable-id='${clickId}']`
+          );
+          if (elem) elem.click();
+        },
+        args: [data.click],
+      });
+    }
+  } catch (err) {
+    console.error("Click check failed:", err);
+  }
+}
+
+setInterval(checkBackendForClick, 3000);
