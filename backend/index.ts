@@ -107,8 +107,13 @@ app.get("/shouldtakess", (req, res) => {
 });
 
 app.post("/screenshotTaken", (req, res) => {
+  shouldCapture = false;
   console.log("Screenshot taken, capture flag set to false");
   res.json({ message: "Capture flag reset" });
+});
+
+app.get("/shouldclick", (req, res) => {
+  res.json({ click: 9 });
 });
 
 app.listen(port, () => {
