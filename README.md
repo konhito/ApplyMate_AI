@@ -1,7 +1,9 @@
+<div align="center">
+
 # ApplyMate AI — Auto-Apply for Jobs & Internships with AI
 
 ![ApplyMate AI Logo](https://i.giphy.com/l41JU9pUyosHzWyuQ.webp)
-
+</div>
 ---
 
 ## **Introduction**
