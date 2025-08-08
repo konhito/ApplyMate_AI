@@ -4,7 +4,7 @@
 
 ![ApplyMate AI Logo](https://i.giphy.com/l41JU9pUyosHzWyuQ.webp)
 </div>
----
+
 
 ## **Introduction**
 
