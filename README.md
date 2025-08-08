@@ -37,7 +37,7 @@
 
 
 
-  <img src = "/backend/uploads/image-1754053893747.jpg" width="200px" alt="gif" />
+  <img src = "/backend/uploads/image-1754053893747.jpg"  />
 
 </div>
 ## **Getting Started**
