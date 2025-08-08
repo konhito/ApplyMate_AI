@@ -2,7 +2,7 @@
 
 # ApplyMate AI — Auto-Apply for Jobs & Internships with AI
 
-![ApplyMate AI Logo](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGpnb25hMjl1MHpoZm8wYnh0cDhycWh1YnJ4a3B1andwOXhjczNwZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/GVvrU5IhK0V4j7Gbxp/giphy.gif)
+![ApplyMate AI Logo](https://giphy.com/embed/jBOOXxSJfG8kqMxT11)
 </div>
 
 
