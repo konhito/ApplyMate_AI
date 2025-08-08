@@ -40,6 +40,8 @@
   <img src = "/backend/uploads/image-1754053893747.jpg"  />
 
 </div>
+
+---
 ## **Getting Started**
 
 ### **1. Clone the Repository**
