@@ -33,8 +33,13 @@
 - It takes screenshots or images of the highlighted elements and sends them to the AI with a curated prompt, based on the user’s resume data.
 - The AI processes the input, fills out the form, and submits it automatically.
 
----
+<div align="center">
 
+
+
+  <img src = "/backend/uploads/image-1754053893747.jpg" width="200px" alt="gif" />
+
+</div>
 ## **Getting Started**
 
 ### **1. Clone the Repository**
