@@ -1,6 +1,6 @@
 <div align="center">
 
-# ApplyMate AI - ## Auto-Apply for Jobs & Internships with AI
+# ApplyMate AI - Auto-Apply for Jobs & Internships with AI
 
   <img src = "https://i.giphy.com/JqmupuTVZYaQX5s094.webp" width="200px" alt="gif" />
 
